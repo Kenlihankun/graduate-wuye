@@ -1,17 +1,24 @@
 <template>
   <div class="chat-container">
-    <h1>与 GPT 对话</h1>
+    <h1>ShallowSeek</h1>
     <div class="messages">
-      <div v-for="(message, index) in messages" :key="index" class="message">
+      <div
+        v-for="(message, index) in messages"
+        :key="index"
+        class="message"
+        :class="{'user-message': message.sender === '用户', 'gpt-message': message.sender === 'GPT'}"
+      >
         <strong>{{ message.sender }}:</strong> {{ message.text }}
       </div>
     </div>
-    <input
-      v-model="userInput"
-      @keyup.enter="sendMessage"
-      placeholder="输入你的消息..."
-    />
-    <button @click="sendMessage">发送</button>
+    <div class="input-container">
+      <input
+        v-model="userInput"
+        @keyup.enter="sendMessage"
+        placeholder="输入你的消息..."
+      />
+      <button @click="sendMessage">发送</button>
+    </div>
   </div>
 </template>
 
@@ -34,15 +41,11 @@ export default {
 
       try {
         console.log('发送的消息:', this.userInput);
-        // 调用 getChat 方法并传递参数
-        const response = await getChat(this.userInput); // 直接传递用户输入
+        const response = await getChat(this.userInput);
         console.log('返回信息:', response);
-        // 检查响应的 code
         if (response.code === 200) {
-          // 添加 GPT 返回的消息
           this.messages.push({ sender: 'GPT', text: response.msg });
         } else {
-          // 如果 code 不是 200，可以处理错误或提示
           this.messages.push({ sender: 'GPT', text: '发生错误，请重试。' });
         }
       } catch (error) {
@@ -58,28 +61,69 @@ export default {
 
 <style>
 .chat-container {
-  max-width: 600px;
+  width: 85vw; /* 设置为 80% 的视口宽度 */
+  height: 90vh; /* 设置为 90% 的视口高度 */
   margin: auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
 }
+
 .messages {
-  max-height: 400px;
-  overflow-y: auto;
+  flex: 1; /* 使消息区域填满剩余空间 */
+  overflow-y: auto; /* 允许垂直滚动 */
   margin-bottom: 10px;
-  border: 1px solid #ddd;
   padding: 10px;
   border-radius: 4px;
+  background-color: #fff;
 }
+
 .message {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 15px;
+  word-wrap: break-word;
+  max-width: 40%; /* 最大宽度为 80% */
 }
+
+.user-message {
+  background-color: #e1ffc7;
+  align-self: flex-end; /* 用户消息右对齐 */
+  margin-left: auto; /* 确保用户消息靠右 */
+}
+
+.gpt-message {
+  background-color: #d1e8ff;
+  align-self: flex-start; /* GPT 消息左对齐 */
+  margin-right: auto; /* 确保 GPT 消息靠左 */
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+}
+
 input {
-  width: calc(100% - 80px);
+  flex: 1;
   padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-right: 10px;
 }
+
 button {
-  padding: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 </style>
