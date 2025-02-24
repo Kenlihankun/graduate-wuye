@@ -65,6 +65,16 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
+  {
+    path: '/api',
+    component: Layout,
+    children: [{
+      path: 'chat',
+      name: 'chat',
+      component: () => import('@/views/chat/chat.vue'),
+      meta: { title: 'chat', icon: 'el-icon-s-promotion' }
+    }]
+  },
   //
   // {
   //   path: '/system',
