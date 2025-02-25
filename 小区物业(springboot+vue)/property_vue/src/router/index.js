@@ -17,12 +17,12 @@ import Layout from '@/layout'
  * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
+ roles: ['admin','editor']    control the page roles (you can set multiple roles)
+ title: 'title'               the name show in sidebar and breadcrumb (recommend set)
+ icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
+ breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
+ activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+ }
  */
 
 /**
@@ -62,18 +62,28 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
+      meta: {title: '首页', icon: 'dashboard'}
     }]
   },
   {
     path: '/api',
     component: Layout,
+    meta: {title: '问与答', icon: 'el-icon-question'},
+    alwaysShow: true,
     children: [{
-      path: 'chat',
-      name: 'chat',
-      component: () => import('@/views/chat/chat.vue'),
-      meta: { title: 'chat', icon: 'el-icon-s-promotion' }
-    }]
+      path: 'home',
+      name: 'home',
+      component: () => import('@/views/chat/home.vue'),
+      meta: {title: 'home', icon: 'el-icon-s-promotion'}
+    },
+      {
+        path: 'chat',
+        name: 'chat',
+        component: () => import('@/views/chat/chat.vue'),
+        meta: {title: 'chat', icon: 'el-icon-s-promotion'},
+        hidden: true
+      },
+    ]
   },
   //
   // {
@@ -248,7 +258,7 @@ export const constantRoutes = [
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })
 

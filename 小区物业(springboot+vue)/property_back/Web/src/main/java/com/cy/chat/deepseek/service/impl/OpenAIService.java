@@ -21,8 +21,8 @@ public class OpenAIService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public String getResponse(String userMessage) throws IOException {
-        String jsonBody = objectMapper.writeValueAsString(new ChatRequest(userMessage));
+    public String getResponse(String userMessage, boolean isPropertyRelated) throws IOException {
+        String jsonBody = objectMapper.writeValueAsString(new ChatRequest(userMessage,isPropertyRelated));
 
         String baseUrl = "http://127.0.0.1:11434/v1";
         String apiKey = "lm-studio";
@@ -31,7 +31,6 @@ public class OpenAIService {
                 .post(RequestBody.create(jsonBody, MediaType.get("application/json")))
                 .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
-
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
@@ -39,7 +38,8 @@ public class OpenAIService {
             ChatResponse chatResponse = objectMapper.readValue(response.body().string(), ChatResponse.class);
             String result = chatResponse.getChoices().get(0).getMessage().getContent();
              // 去掉 <think> 标签及其内容
-            return result.replaceAll("<think>\\s*</think>", "").trim();
+            return result = result.replaceAll("(?s)<think>.*?</think>", "").trim();
+
         }
     }
 }

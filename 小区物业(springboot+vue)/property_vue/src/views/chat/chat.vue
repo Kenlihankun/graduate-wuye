@@ -30,7 +30,14 @@ export default {
     return {
       userInput: '',
       messages: [],
+      isPropertyRelated: false,  // 用来存储查询参数
     };
+  },
+  created() {
+    // 获取传递的查询参数并进行类型转换
+    console.log('测试:', this.$route.query.isPropertyRelated); // 打印布尔值
+    this.isPropertyRelated = this.$route.query.isPropertyRelated === true;
+    console.log('物业相关:', this.isPropertyRelated); // 打印布尔值
   },
   methods: {
     async sendMessage() {
@@ -41,7 +48,7 @@ export default {
 
       try {
         console.log('发送的消息:', this.userInput);
-        const response = await getChat(this.userInput);
+        const response = await getChat(this.userInput,this.isPropertyRelated);
         console.log('返回信息:', response);
         if (response.code === 200) {
           this.messages.push({ sender: 'GPT', text: response.msg });

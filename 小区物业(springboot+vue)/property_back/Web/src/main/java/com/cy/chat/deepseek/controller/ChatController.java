@@ -28,8 +28,8 @@ public class ChatController {
      * @return
      */
     @GetMapping("/get")
-    public CommonResult<String> getList( String param) throws IOException {
+    public CommonResult<String> getList( String param, boolean isPropertyRelated) throws IOException {
 
-        return CommonResult.success(openAIService.getResponse(param));
+        return CommonResult.success(openAIService.getResponse(param, isPropertyRelated));
     }
 }
