@@ -33,6 +33,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.11.54.ALL</version>
+        </dependency>
+
         <!--数据库依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
