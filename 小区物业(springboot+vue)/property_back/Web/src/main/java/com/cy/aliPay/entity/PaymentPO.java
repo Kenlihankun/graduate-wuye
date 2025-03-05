@@ -24,7 +24,7 @@ import java.util.Date;
  * @date 2022-01-22 10:32:32
  */
 @Data
-public class payment implements Serializable {
+public class PaymentPO implements Serializable {
     @TableId(type = IdType.AUTO)
     @NotNull(groups = {feePay.class})
     private Long paymentId;
@@ -41,9 +41,7 @@ public class payment implements Serializable {
     /**
      *  缴费状态
      */
-    @listValue(values = {"0","1"})
-    @NotBlank(groups = {feePay.class,feeAddOrEdit.class})
-    private String status;
+    private Integer status;
 
     /**
      * 缴费时间

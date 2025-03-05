@@ -1,9 +1,9 @@
 package com.cy.aliPay.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cy.aliPay.entity.payment;
+import com.cy.aliPay.entity.PaymentPO;
 
-public interface PaymentMapper extends BaseMapper<payment> {
+public interface PaymentMapper extends BaseMapper<PaymentPO> {
 
 
 }
