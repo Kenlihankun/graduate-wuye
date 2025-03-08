@@ -1,4 +1,4 @@
-package com.cy.aliPay.entity;
+package com.cy.Pay.aliPay.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;

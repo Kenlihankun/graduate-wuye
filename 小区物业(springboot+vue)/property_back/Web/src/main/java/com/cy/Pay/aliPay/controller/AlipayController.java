@@ -1,4 +1,4 @@
-package com.cy.aliPay.controller;
+package com.cy.Pay.aliPay.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
@@ -6,15 +6,14 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
-import com.cy.aliPay.Enum.PaymentStatusEnum;
-import com.cy.aliPay.entity.PaymentPO;
-import com.cy.aliPay.mapper.PaymentMapper;
+import com.cy.Pay.aliPay.Enum.PaymentStatusEnum;
+import com.cy.Pay.aliPay.entity.PaymentPO;
+import com.cy.Pay.aliPay.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,8 +23,8 @@ import java.util.Date;
 @Slf4j
 public class AlipayController {
 
-    @Resource
-    private PaymentMapper paymentMapper;
+    @Autowired
+    private PaymentService paymentService;
 
 
     private static final String publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtWyD99Tx6ZgYYsh9MB7x1dXhdjzXRhcWSxBwKv5nUsKazvRfMs4+Ng2sX5/JyvUgTmM2/ex1aRqaur3huR7jnLloiuTt2/gn7V2g+zd3G5+llR0SJL2wIBmmRI2AwP+6k+8XG6Nncl+0ETHbWS2WT5tIjucZbhBYt8obSmR6GM4hUMtUqY6E27II2CW4Lrzc6Z7iTN2h8JNXAz8+CzHXQ3b+Qo6hYLGM/OS4hv8LhZS5LWg/ZAOdT+z2iqcuZHfygdjCRvKNustIysGr2MzW6f7pltBbFPdKWqXs+Zt8CYGLhL4VmhkOWXy2seX5C2iotGadJ8NpJ2AWVl+961DwEwIDAQAB";
@@ -70,7 +69,7 @@ public class AlipayController {
             PaymentPO paymentPO = new PaymentPO();
             paymentPO.setAmount(amt);
             paymentPO.setStatus(PaymentStatusEnum.process.getCode());
-            paymentMapper.insert(paymentPO);
+            paymentService.insertData(paymentPO);
             return response.getBody();
         } catch (AlipayApiException e) {
             log.error("【 Ali pay 异常 】", e);
