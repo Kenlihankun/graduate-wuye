@@ -3,6 +3,7 @@ package com.cy.chat.deepseek.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cy.chat.deepseek.entity.ChatRequest;
 import com.cy.chat.deepseek.entity.ChatResponse;
+import com.cy.chat.deepseek.entity.newChatRequest;
 import com.cy.noticeManagement.sys_notice.entity.SysNotice;
 import com.cy.noticeManagement.sys_notice.service.SysNoticeService;
 import okhttp3.*;
@@ -66,6 +67,30 @@ public class OpenAIService {
              // 去掉 <think> 标签及其内容
             return result.replaceAll("(?s)<think>.*?</think>", "").trim();
 
+        }
+    }
+
+
+    public String newGetResponse(String name,String other1,String other2,String other3) throws IOException {
+
+
+        String jsonBody = objectMapper.writeValueAsString(new newChatRequest(name,other1,other2,other3));
+
+        String baseUrl = "http://127.0.0.1:11434/v1";
+        String apiKey = "lm-studio";
+        Request request = new Request.Builder()
+                .url(baseUrl + "/chat/completions")
+                .post(RequestBody.create(jsonBody, MediaType.get("application/json")))
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+            ChatResponse chatResponse = objectMapper.readValue(response.body().string(), ChatResponse.class);
+            String result = chatResponse.getChoices().get(0).getMessage().getContent();
+            // 去掉 <think> 标签及其内容
+            return result.replaceAll("(?s)<think>.*?</think>", "").trim();
         }
     }
 }
