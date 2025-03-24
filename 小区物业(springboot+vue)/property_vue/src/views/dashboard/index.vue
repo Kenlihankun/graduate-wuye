@@ -1,18 +1,21 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">welcome! {{ name }}</div>
+    <Carousel />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Carousel from './Carousel.vue'
 
 export default {
   name: 'Dashboard',
+  components: {
+    Carousel
+  },
   computed: {
-    ...mapGetters([
-      'name'
-    ])
+    ...mapGetters(['name'])
   }
 }
 </script>
