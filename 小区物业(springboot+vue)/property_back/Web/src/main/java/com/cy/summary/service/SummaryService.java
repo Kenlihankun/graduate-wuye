@@ -1,4 +1,8 @@
 package com.cy.summary.service;
 
-public interface SummaryService {
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.cy.summary.entity.summary;
+
+public interface SummaryService extends IService<summary> {
+    void saveSummary(summary summary);
 }

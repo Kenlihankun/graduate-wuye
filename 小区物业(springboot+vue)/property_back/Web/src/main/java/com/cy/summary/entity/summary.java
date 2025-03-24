@@ -38,23 +38,9 @@ public class summary implements Serializable {
     private String summary;
 
     /**
-     * 开始时间
+     * 月份时间
      */
 
-    @JsonFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss",
-            timezone = "GMT+8"
-    )
-    private Date startTime;
-
-    /**
-     * 结束时间
-     */
-    @JsonFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss",
-            timezone = "GMT+8"
-    )
-    private Date endTime;
-
+    private String time;    //2021-02
 
 }
