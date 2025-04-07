@@ -66,6 +66,16 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/summary',
+    component: Layout,
+    children: [{
+      path: 'summary',
+      name: 'summary',
+      component: () => import('@/views/summary/summary.vue'),
+      meta: {title: '月度总结', icon: 'el-icon-present'}
+    }]
+  },
+  {
     path: '/api',
     component: Layout,
     meta: {title: '问与答', icon: 'el-icon-question'},
