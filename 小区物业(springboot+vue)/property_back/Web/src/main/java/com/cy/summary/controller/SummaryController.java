@@ -31,4 +31,14 @@ public class SummaryController {
 
         return CommonResult.success("查询成功",summaryService.getSummaryByUserId(userId));
     }
+
+    /**
+     *
+     * @return
+     */
+    @GetMapping("/backdoor/get")
+    public void testTask() {
+
+        summaryService.testExecuteMonthlyTask();
+    }
 }

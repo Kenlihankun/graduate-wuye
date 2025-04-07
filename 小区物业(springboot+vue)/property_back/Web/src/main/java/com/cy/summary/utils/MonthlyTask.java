@@ -27,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
@@ -71,7 +72,7 @@ public class MonthlyTask {
         // 获取当前日期
         LocalDate currentDate = LocalDate.now();
         LocalDate lastMonthDate = currentDate.minusMonths(1);
-
+        LocalDateTime currentDateTime = LocalDateTime.now();
         // 定义格式化器
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
@@ -81,7 +82,7 @@ public class MonthlyTask {
         // 格式化上个月的日期
         String lastMonthFormatted = lastMonthDate.format(formatter);
 
-        String newLastMonthFormatted = lastMonthDate.format(newFormatter);
+        String newLastMonthFormatted = currentDateTime.format(newFormatter);
 
         LambdaQueryWrapper<LiveUser> liveUserQueryWrapper = new LambdaQueryWrapper<>();
         liveUserQueryWrapper.eq(LiveUser::getStatus, "0"); // 使用字符串 "0" 表示_STATUS 状态
@@ -90,15 +91,15 @@ public class MonthlyTask {
             for (LiveUser liveUser : liveUserList) {
                 QueryWrapper<FeePark> feeParkQueryWrapper = new QueryWrapper<>();
 
-                feeParkQueryWrapper.eq("payParkMonth",lastMonthFormatted);
+                feeParkQueryWrapper.eq("pay_park_month",lastMonthFormatted);
                 List<FeePark> feeParks =  feeParkMapper.selectList(feeParkQueryWrapper);
 
                 QueryWrapper<FeeWater> feeWaterQueryWrapper = new QueryWrapper<>();
-                feeWaterQueryWrapper.eq("payWaterMonth",lastMonthFormatted);
+                feeWaterQueryWrapper.eq("pay_water_month",lastMonthFormatted);
                 List<FeeWater> feeWaters = feeWaterMapper.selectList(feeWaterQueryWrapper);
 
                 QueryWrapper<FeePower> feePowerQueryWrapper = new QueryWrapper<>();
-                feePowerQueryWrapper.eq("payPowerMonth",lastMonthFormatted);
+                feePowerQueryWrapper.eq("pay_power_month",lastMonthFormatted);
                 List<FeePower> feePowers = feePowerMapper.selectList(feePowerQueryWrapper);
 
                 if (CollectionUtils.isEmpty(feeParks) && CollectionUtils.isEmpty(feeWaters) && CollectionUtils.isEmpty(feePowers)) {
@@ -106,9 +107,9 @@ public class MonthlyTask {
                 }
                 String result = openAIService.newGetResponse(liveUser.getLoginName(),CollectionUtils.isEmpty(feePowers) ? "" : feeParks.toString(),
                         CollectionUtils.isEmpty(feeParks) ? "" : feePowers.toString(),
-                        CollectionUtils.isEmpty(feeWaters) ? "" : feeWaters.toString());
+                        CollectionUtils.isEmpty(feeWaters) ? "empty" : feeWaters.toString());
                 summary summary = new summary();
-                summary.setSummary(result);
+                summary.setSummary(result.replaceAll("(?s)<think>.*?</think>", "").trim());
                 summary.setTime(lastMonthFormatted);
                 summary.setUserId(liveUser.getUserId());
                 summaryService.saveSummary(summary);
@@ -121,11 +122,11 @@ public class MonthlyTask {
         if (!CollectionUtils.isEmpty(users)) {
             for (User user : users) {
                 QueryWrapper<UserRepair> repairQueryWrapper = new QueryWrapper<>();
-                repairQueryWrapper.eq("commitTime",newLastMonthFormatted);
+                repairQueryWrapper.eq("commit_time",newLastMonthFormatted);
                 List<UserRepair> userRepairs =  userRepairMapper.selectList(repairQueryWrapper);
 
                 QueryWrapper<UserComplaint> userComplaintQueryWrapper = new QueryWrapper<>();
-                userComplaintQueryWrapper.eq("createTime",newLastMonthFormatted);
+                userComplaintQueryWrapper.eq("create_time",newLastMonthFormatted);
                 List<UserComplaint> userComplaints =  userComplaintMapper.selectList(userComplaintQueryWrapper);
 
                 if (CollectionUtils.isEmpty(userComplaints) && CollectionUtils.isEmpty(userRepairs)) {
@@ -134,7 +135,7 @@ public class MonthlyTask {
                 String result = openAIService.newGetResponse(user.getLoginName(),CollectionUtils.isEmpty(userRepairs) ? "" : userRepairs.toString(),
                         CollectionUtils.isEmpty(userComplaints) ? "" : userComplaints.toString(),null);
                 summary summary = new summary();
-                summary.setSummary(result);
+                summary.setSummary(result.replaceAll("(?s)<think>.*?</think>", "").trim());
                 summary.setTime(lastMonthFormatted);
                 summary.setUserId(user.getUserId());
                 summaryService.saveSummary(summary);

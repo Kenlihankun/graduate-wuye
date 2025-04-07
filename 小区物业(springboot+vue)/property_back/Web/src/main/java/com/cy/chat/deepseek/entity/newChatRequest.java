@@ -12,11 +12,11 @@ import java.util.List;
 @Setter
 public class newChatRequest {
 
-    private final String prompt1 = "Prompt：The user is a tenant in the community. Please provide suggestions and summary based on the current month's water fee, electricity fee, and parking fee." +
+    private final String prompt1 = "Prompt：The user is a tenant in the community. Please provide suggestions and summary based on the current month's electricity fee, parking fee, and water fee." +
             "user is the user name:%s park fee:%s,water fee:%s,power fee:%s";
 
     private final String prompt2 = "Prompt：The user is the manager of the community. Please provide management suggestions and summary based on the current month's repair status and complaint situations." +
-            "name:%s,complaint:%s,repair:%s";
+            "name:%s,repair:%s,complaint:%s";
 
     // Getters
     private final String model = "deepseek-r1:7b";
