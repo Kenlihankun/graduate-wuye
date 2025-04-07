@@ -72,8 +72,13 @@ export const constantRoutes = [
       path: 'summary',
       name: 'summary',
       component: () => import('@/views/summary/summary.vue'),
-      meta: {title: '月度总结', icon: 'el-icon-present'}
+      meta: {title: '月度总结', icon: 'el-icon-present',}
     }]
+  },
+  {
+    path: '/pay',
+    component: () => import('@/views/pay/pay.vue'),
+    hidden: true
   },
   {
     path: '/api',

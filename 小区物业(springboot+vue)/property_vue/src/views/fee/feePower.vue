@@ -162,6 +162,7 @@
     deletePowerApi,
     payPowerApi
   } from "../../api/feePower";
+  import {aliPay} from "@/api/aliPay";
 
   export default {
     name: "feePower",
@@ -285,6 +286,24 @@
         //提示信息
         const confirm = await this.$myconfirm('确定缴费吗？');
         if (confirm) {
+          let payParam = {
+            amt: Number(row.payParkMoney),
+            subject: row.loginName,
+            body: Number(row.payParkMoney)
+          };
+          console.log("=======================",payParam)
+          const paymentResponse = await aliPay(payParam);
+          console.log("=======================",paymentResponse)
+          // 创建一个新的窗口以查看表单
+          const paymentWindow = window.open('', '_blank', 'width=600,height=400');
+          if (paymentWindow) {
+            // 通过 document.write() 写入 HTML 代码
+            paymentWindow.document.write(paymentResponse);
+            paymentWindow.document.close(); // 关闭文档流
+          } else {
+            console.error("无法打开新窗口，可能是由于浏览器阻止弹窗。");
+          }
+
           let param = {
             powerId: row.powerId,
             payPowerStatus: "1",
